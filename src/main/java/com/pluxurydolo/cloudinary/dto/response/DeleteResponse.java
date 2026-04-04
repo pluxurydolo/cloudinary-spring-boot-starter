@@ -23,11 +23,8 @@ public record DeleteResponse(
     Boolean partial
 ) {
     public boolean isSuccessful() {
-        if (result == null) {
-            return false;
-        }
-
-        return List.of("ok", "deleted")
-            .contains(result.toLowerCase(US));
+        return result != null &&
+            List.of("ok", "deleted")
+                .contains(result.toLowerCase(US));
     }
 }
