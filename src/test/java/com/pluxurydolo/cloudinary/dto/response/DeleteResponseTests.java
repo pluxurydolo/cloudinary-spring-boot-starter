@@ -8,18 +8,18 @@ class DeleteResponseTests {
 
     @Test
     void testIsSuccessful() {
-        DeleteResponse okResult = deleteResponse("ok");
-        DeleteResponse deletedResult = deleteResponse("deleted");
-        DeleteResponse doneResult = deleteResponse("done");
-        DeleteResponse nullResult = deleteResponse(null);
+        boolean okResult = deleteResponse("ok").isSuccessful();
+        boolean deletedResult = deleteResponse("deleted").isSuccessful();
+        boolean doneResult = deleteResponse("done").isSuccessful();
+        boolean nullResult = deleteResponse(null).isSuccessful();
 
-        assertThat(okResult.isSuccessful())
+        assertThat(okResult)
             .isTrue();
-        assertThat(deletedResult.isSuccessful())
+        assertThat(deletedResult)
             .isTrue();
-        assertThat(doneResult.isSuccessful())
+        assertThat(doneResult)
             .isFalse();
-        assertThat(nullResult.isSuccessful())
+        assertThat(nullResult)
             .isFalse();
     }
 
