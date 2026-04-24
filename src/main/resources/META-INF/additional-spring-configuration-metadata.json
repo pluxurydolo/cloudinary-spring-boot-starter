@@ -1,0 +1,63 @@
+{
+  "properties": [
+    {
+      "name": "cloudinary.cloud.name",
+      "type": "java.lang.String",
+      "description": "Cloudinary Cloud Name.",
+      "sourceType": "com.pluxurydolo.cloudinary.properties.CloudinaryProperties"
+    },
+    {
+      "name": "cloudinary.api.key",
+      "type": "java.lang.String",
+      "description": "Cloudinary API Key.",
+      "sourceType": "com.pluxurydolo.cloudinary.properties.CloudinaryProperties"
+    },
+    {
+      "name": "cloudinary.api.secret",
+      "type": "java.lang.String",
+      "description": "Cloudinary API Secret.",
+      "sourceType": "com.pluxurydolo.cloudinary.properties.CloudinaryProperties"
+    }
+  ],
+  "hints": [
+    {
+      "name": "cloudinary.cloud.name",
+      "values": [
+        {
+          "value": "${CLOUDINARY_CLOUD_NAME}"
+        }
+      ],
+      "providers": [
+        {
+          "name": "any"
+        }
+      ]
+    },
+    {
+      "name": "cloudinary.api.key",
+      "values": [
+        {
+          "value": "${CLOUDINARY_API_KEY}"
+        }
+      ],
+      "providers": [
+        {
+          "name": "any"
+        }
+      ]
+    },
+    {
+      "name": "cloudinary.api.secret",
+      "values": [
+        {
+          "value": "${CLOUDINARY_API_SECRET}"
+        }
+      ],
+      "providers": [
+        {
+          "name": "any"
+        }
+      ]
+    }
+  ]
+}

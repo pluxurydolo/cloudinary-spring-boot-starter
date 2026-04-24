@@ -1,4 +1,4 @@
-package com.pluxurydolo.cloudinary.config;
+package com.pluxurydolo.cloudinary.configuration;
 
 import com.cloudinary.Cloudinary;
 import com.pluxurydolo.cloudinary.client.CloudinaryClient;
