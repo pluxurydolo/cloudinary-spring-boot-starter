@@ -70,9 +70,4 @@ public record UploadResponse(
     @JsonProperty("folder")
     String folder
 ) {
-    public boolean isSuccessful() {
-        boolean publicIdValid = publicId != null && !publicId.isEmpty();
-        boolean secureUrlValid = secureUrl != null && !secureUrl.isEmpty();
-        return publicIdValid && secureUrlValid;
-    }
 }

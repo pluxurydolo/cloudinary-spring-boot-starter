@@ -10,9 +10,14 @@ import com.pluxurydolo.cloudinary.dto.request.UploadRequest;
 import com.pluxurydolo.cloudinary.dto.response.DeleteResponse;
 import com.pluxurydolo.cloudinary.dto.response.ResourceResponse;
 import com.pluxurydolo.cloudinary.dto.response.UploadResponse;
-import com.pluxurydolo.cloudinary.exception.CloudinaryDeleteException;
-import com.pluxurydolo.cloudinary.exception.CloudinaryResourceException;
-import com.pluxurydolo.cloudinary.exception.CloudinaryUploadException;
+import com.pluxurydolo.cloudinary.exception.CloudinaryDeleteImageException;
+import com.pluxurydolo.cloudinary.exception.CloudinaryDeleteVideoException;
+import com.pluxurydolo.cloudinary.exception.CloudinaryImageSecureUrlException;
+import com.pluxurydolo.cloudinary.exception.CloudinaryUploadImageException;
+import com.pluxurydolo.cloudinary.exception.CloudinaryUploadVideoException;
+import com.pluxurydolo.cloudinary.exception.CloudinaryValidationException;
+import com.pluxurydolo.cloudinary.exception.CloudinaryVideoSecureUrlException;
+import com.pluxurydolo.cloudinary.validator.ResponseValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,6 +41,9 @@ class CloudinaryClientTests {
 
     @Mock
     private Cloudinary cloudinary;
+
+    @Mock
+    private ResponseValidator responseValidator;
 
     @Mock
     private ObjectMapper objectMapper;
@@ -69,8 +77,8 @@ class CloudinaryClientTests {
             .thenReturn(Map.of());
         when(objectMapper.convertValue(any(), eq(UploadResponse.class)))
             .thenReturn(uploadResponse);
-        when(uploadResponse.isSuccessful())
-            .thenReturn(true);
+        when(responseValidator.validateUploadResponse(anyString(), any()))
+            .thenReturn(Mono.just(uploadResponse));
         when(uploadResponse.publicId())
             .thenReturn("publicId");
 
@@ -82,20 +90,20 @@ class CloudinaryClientTests {
     }
 
     @Test
-    void testUploadImageWhenResponseIsUnsuccessful() throws IOException {
+    void testUploadImageWhenValidationFailed() throws IOException {
         when(cloudinary.uploader())
             .thenReturn(uploader);
         when(uploader.upload(any(), anyMap()))
             .thenReturn(Map.of());
         when(objectMapper.convertValue(any(), eq(UploadResponse.class)))
             .thenReturn(uploadResponse);
-        when(uploadResponse.isSuccessful())
-            .thenReturn(false);
+        when(responseValidator.validateUploadResponse(anyString(), any()))
+            .thenReturn(Mono.error(new CloudinaryValidationException()));
 
         Mono<String> result = cloudinaryClient.uploadImage(uploadRequest());
 
         create(result)
-            .expectError(CloudinaryUploadException.class)
+            .expectError(CloudinaryUploadImageException.class)
             .verify();
     }
 
@@ -107,8 +115,8 @@ class CloudinaryClientTests {
             .thenReturn(Map.of());
         when(objectMapper.convertValue(any(), eq(UploadResponse.class)))
             .thenReturn(uploadResponse);
-        when(uploadResponse.isSuccessful())
-            .thenReturn(true);
+        when(responseValidator.validateUploadResponse(anyString(), any()))
+            .thenReturn(Mono.just(uploadResponse));
         when(uploadResponse.publicId())
             .thenReturn("publicId");
 
@@ -120,20 +128,20 @@ class CloudinaryClientTests {
     }
 
     @Test
-    void testUploadVideoWhenResponseIsUnsuccessful() throws IOException {
+    void testUploadVideoWhenValidationFailed() throws IOException {
         when(cloudinary.uploader())
             .thenReturn(uploader);
         when(uploader.upload(any(), anyMap()))
             .thenReturn(Map.of());
         when(objectMapper.convertValue(any(), eq(UploadResponse.class)))
             .thenReturn(uploadResponse);
-        when(uploadResponse.isSuccessful())
-            .thenReturn(false);
+        when(responseValidator.validateUploadResponse(anyString(), any()))
+            .thenReturn(Mono.error(new CloudinaryValidationException()));
 
         Mono<String> result = cloudinaryClient.uploadVideo(uploadRequest());
 
         create(result)
-            .expectError(CloudinaryUploadException.class)
+            .expectError(CloudinaryUploadVideoException.class)
             .verify();
     }
 
@@ -145,8 +153,8 @@ class CloudinaryClientTests {
             .thenReturn(apiResponse);
         when(objectMapper.convertValue(any(), eq(ResourceResponse.class)))
             .thenReturn(resourceResponse);
-        when(resourceResponse.isSuccessful())
-            .thenReturn(true);
+        when(responseValidator.validateResourceResponse(anyString(), any()))
+            .thenReturn(Mono.just(resourceResponse));
         when(resourceResponse.secureUrl())
             .thenReturn("secureUrl");
 
@@ -158,20 +166,20 @@ class CloudinaryClientTests {
     }
 
     @Test
-    void testGetImageSecureUrlWhenResponseIsUnsuccessful() throws Exception {
+    void testGetImageSecureUrlWhenValidationFailed() throws Exception {
         when(cloudinary.api())
             .thenReturn(api);
         when(api.resource(anyString(), anyMap()))
             .thenReturn(apiResponse);
         when(objectMapper.convertValue(any(), eq(ResourceResponse.class)))
             .thenReturn(resourceResponse);
-        when(resourceResponse.isSuccessful())
-            .thenReturn(false);
+        when(responseValidator.validateResourceResponse(anyString(), any()))
+            .thenReturn(Mono.error(new CloudinaryValidationException()));
 
         Mono<String> result = cloudinaryClient.getImageSecureUrl(getSecureUrlRequest());
 
         create(result)
-            .expectError(CloudinaryResourceException.class)
+            .expectError(CloudinaryImageSecureUrlException.class)
             .verify();
     }
 
@@ -183,8 +191,8 @@ class CloudinaryClientTests {
             .thenReturn(apiResponse);
         when(objectMapper.convertValue(any(), eq(ResourceResponse.class)))
             .thenReturn(resourceResponse);
-        when(resourceResponse.isSuccessful())
-            .thenReturn(true);
+        when(responseValidator.validateResourceResponse(anyString(), any()))
+            .thenReturn(Mono.just(resourceResponse));
         when(resourceResponse.secureUrl())
             .thenReturn("secureUrl");
 
@@ -196,20 +204,20 @@ class CloudinaryClientTests {
     }
 
     @Test
-    void testGetVideoSecureUrlWhenResponseIsUnsuccessful() throws Exception {
+    void testGetVideoSecureUrlWhenValidationFailed() throws Exception {
         when(cloudinary.api())
             .thenReturn(api);
         when(api.resource(anyString(), anyMap()))
             .thenReturn(apiResponse);
         when(objectMapper.convertValue(any(), eq(ResourceResponse.class)))
             .thenReturn(resourceResponse);
-        when(resourceResponse.isSuccessful())
-            .thenReturn(false);
+        when(responseValidator.validateResourceResponse(anyString(), any()))
+            .thenReturn(Mono.error(new CloudinaryValidationException()));
 
         Mono<String> result = cloudinaryClient.getVideoSecureUrl(getSecureUrlRequest());
 
         create(result)
-            .expectError(CloudinaryResourceException.class)
+            .expectError(CloudinaryVideoSecureUrlException.class)
             .verify();
     }
 
@@ -221,8 +229,8 @@ class CloudinaryClientTests {
             .thenReturn(Map.of());
         when(objectMapper.convertValue(any(), eq(DeleteResponse.class)))
             .thenReturn(deleteResponse);
-        when(deleteResponse.isSuccessful())
-            .thenReturn(true);
+        when(responseValidator.validateDeleteResponse(any()))
+            .thenReturn(Mono.just(deleteResponse));
         when(deleteResponse.result())
             .thenReturn("ok");
 
@@ -234,20 +242,20 @@ class CloudinaryClientTests {
     }
 
     @Test
-    void testDeleteImageWhenResponseIsUnsuccessful() throws IOException {
+    void testDeleteImageWhenValidationFailed() throws IOException {
         when(cloudinary.uploader())
             .thenReturn(uploader);
         when(uploader.destroy(anyString(), anyMap()))
             .thenReturn(Map.of());
         when(objectMapper.convertValue(any(), eq(DeleteResponse.class)))
             .thenReturn(deleteResponse);
-        when(deleteResponse.isSuccessful())
-            .thenReturn(false);
+        when(responseValidator.validateDeleteResponse(any()))
+            .thenReturn(Mono.error(new CloudinaryValidationException()));
 
         Mono<String> result = cloudinaryClient.deleteImage(deleteRequest());
 
         create(result)
-            .expectError(CloudinaryDeleteException.class)
+            .expectError(CloudinaryDeleteImageException.class)
             .verify();
     }
 
@@ -259,8 +267,8 @@ class CloudinaryClientTests {
             .thenReturn(Map.of());
         when(objectMapper.convertValue(any(), eq(DeleteResponse.class)))
             .thenReturn(deleteResponse);
-        when(deleteResponse.isSuccessful())
-            .thenReturn(true);
+        when(responseValidator.validateDeleteResponse(any()))
+            .thenReturn(Mono.just(deleteResponse));
         when(deleteResponse.result())
             .thenReturn("ok");
 
@@ -272,20 +280,20 @@ class CloudinaryClientTests {
     }
 
     @Test
-    void testDeleteVideoWhenResponseIsUnsuccessful() throws IOException {
+    void testDeleteVideoWhenValidationFailed() throws IOException {
         when(cloudinary.uploader())
             .thenReturn(uploader);
         when(uploader.destroy(anyString(), anyMap()))
             .thenReturn(Map.of());
         when(objectMapper.convertValue(any(), eq(DeleteResponse.class)))
             .thenReturn(deleteResponse);
-        when(deleteResponse.isSuccessful())
-            .thenReturn(false);
+        when(responseValidator.validateDeleteResponse(any()))
+            .thenReturn(Mono.error(new CloudinaryValidationException()));
 
         Mono<String> result = cloudinaryClient.deleteVideo(deleteRequest());
 
         create(result)
-            .expectError(CloudinaryDeleteException.class)
+            .expectError(CloudinaryDeleteVideoException.class)
             .verify();
     }
 

@@ -3,10 +3,6 @@ package com.pluxurydolo.cloudinary.dto.response;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-
-import static java.util.Locale.US;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record DeleteResponse(
 
@@ -22,9 +18,4 @@ public record DeleteResponse(
     @JsonProperty("partial")
     Boolean partial
 ) {
-    public boolean isSuccessful() {
-        return result != null &&
-            List.of("ok", "deleted")
-                .contains(result.toLowerCase(US));
-    }
 }

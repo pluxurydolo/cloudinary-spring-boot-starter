@@ -97,9 +97,4 @@ public record ResourceResponse(
     @JsonProperty("api_metadata")
     Map<String, Object> apiMetadata
 ) {
-    public boolean isSuccessful() {
-        boolean publicIdValid = publicId != null && !publicId.isEmpty();
-        boolean secureUrlValid = secureUrl != null && !secureUrl.isEmpty();
-        return publicIdValid && secureUrlValid;
-    }
 }

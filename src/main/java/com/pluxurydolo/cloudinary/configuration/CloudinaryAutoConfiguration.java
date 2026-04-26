@@ -3,6 +3,7 @@ package com.pluxurydolo.cloudinary.configuration;
 import com.cloudinary.Cloudinary;
 import com.pluxurydolo.cloudinary.client.CloudinaryClient;
 import com.pluxurydolo.cloudinary.properties.CloudinaryProperties;
+import com.pluxurydolo.cloudinary.validator.ResponseValidator;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -17,8 +18,18 @@ public class CloudinaryAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public CloudinaryClient cloudinaryClient(Cloudinary cloudinary, ObjectMapper objectMapper) {
-        return new CloudinaryClient(cloudinary, objectMapper);
+    public CloudinaryClient cloudinaryClient(
+        Cloudinary cloudinary,
+        ResponseValidator responseValidator,
+        ObjectMapper objectMapper
+    ) {
+        return new CloudinaryClient(cloudinary, responseValidator, objectMapper);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public ResponseValidator responseValidator() {
+        return new ResponseValidator();
     }
 
     @Bean
