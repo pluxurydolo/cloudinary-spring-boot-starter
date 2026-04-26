@@ -32,7 +32,6 @@ public class CloudinaryTestConfiguration {
             .thenReturn(resourceResponse());
         when(uploader.destroy(anyString(), anyMap()))
             .thenReturn(deleteResponse());
-
         when(cloudinary.api())
             .thenReturn(api);
         when(api.resource(anyString(), anyMap()))
