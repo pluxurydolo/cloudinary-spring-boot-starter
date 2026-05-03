@@ -48,8 +48,7 @@ class ResponseValidatorTests {
         Mono<UploadResponse> result = VALIDATOR.validateUploadResponse("resourceName", uploadResponse);
 
         create(result)
-            .expectError(CloudinaryValidationException.class)
-            .verify();
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(CloudinaryValidationException.class));
     }
 
     @Test
@@ -60,8 +59,7 @@ class ResponseValidatorTests {
         Mono<UploadResponse> result = VALIDATOR.validateUploadResponse("resourceName", uploadResponse);
 
         create(result)
-            .expectError(CloudinaryValidationException.class)
-            .verify();
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(CloudinaryValidationException.class));
     }
 
     @Test
@@ -86,8 +84,7 @@ class ResponseValidatorTests {
         Mono<ResourceResponse> result = VALIDATOR.validateResourceResponse("resourceName", resourceResponse);
 
         create(result)
-            .expectError(CloudinaryValidationException.class)
-            .verify();
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(CloudinaryValidationException.class));
     }
 
     @Test
@@ -98,8 +95,7 @@ class ResponseValidatorTests {
         Mono<ResourceResponse> result = VALIDATOR.validateResourceResponse("resourceName", resourceResponse);
 
         create(result)
-            .expectError(CloudinaryValidationException.class)
-            .verify();
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(CloudinaryValidationException.class));
     }
 
     @Test
@@ -119,8 +115,7 @@ class ResponseValidatorTests {
         Mono<DeleteResponse> result = VALIDATOR.validateDeleteResponse(deleteResponse);
 
         create(result)
-            .expectError(CloudinaryValidationException.class)
-            .verify();
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(CloudinaryValidationException.class));
     }
 
     @Test
@@ -131,7 +126,6 @@ class ResponseValidatorTests {
         Mono<DeleteResponse> result = VALIDATOR.validateDeleteResponse(deleteResponse);
 
         create(result)
-            .expectError(CloudinaryValidationException.class)
-            .verify();
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(CloudinaryValidationException.class));
     }
 }

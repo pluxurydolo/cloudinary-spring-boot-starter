@@ -103,8 +103,7 @@ class CloudinaryClientTests {
         Mono<String> result = cloudinaryClient.uploadImage(uploadRequest());
 
         create(result)
-            .expectError(CloudinaryUploadImageException.class)
-            .verify();
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(CloudinaryUploadImageException.class));
     }
 
     @Test
@@ -141,8 +140,7 @@ class CloudinaryClientTests {
         Mono<String> result = cloudinaryClient.uploadVideo(uploadRequest());
 
         create(result)
-            .expectError(CloudinaryUploadVideoException.class)
-            .verify();
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(CloudinaryUploadVideoException.class));
     }
 
     @Test
@@ -179,8 +177,7 @@ class CloudinaryClientTests {
         Mono<String> result = cloudinaryClient.getImageSecureUrl(getSecureUrlRequest());
 
         create(result)
-            .expectError(CloudinaryImageSecureUrlException.class)
-            .verify();
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(CloudinaryImageSecureUrlException.class));
     }
 
     @Test
@@ -217,8 +214,7 @@ class CloudinaryClientTests {
         Mono<String> result = cloudinaryClient.getVideoSecureUrl(getSecureUrlRequest());
 
         create(result)
-            .expectError(CloudinaryVideoSecureUrlException.class)
-            .verify();
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(CloudinaryVideoSecureUrlException.class));
     }
 
     @Test
@@ -255,8 +251,7 @@ class CloudinaryClientTests {
         Mono<String> result = cloudinaryClient.deleteImage(deleteRequest());
 
         create(result)
-            .expectError(CloudinaryDeleteImageException.class)
-            .verify();
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(CloudinaryDeleteImageException.class));
     }
 
     @Test
@@ -293,8 +288,7 @@ class CloudinaryClientTests {
         Mono<String> result = cloudinaryClient.deleteVideo(deleteRequest());
 
         create(result)
-            .expectError(CloudinaryDeleteVideoException.class)
-            .verify();
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(CloudinaryDeleteVideoException.class));
     }
 
     private static UploadRequest uploadRequest() {
