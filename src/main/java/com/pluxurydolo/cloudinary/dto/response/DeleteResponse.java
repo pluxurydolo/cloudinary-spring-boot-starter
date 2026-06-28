@@ -5,17 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record DeleteResponse(
-
-    @JsonProperty("result")
-    String result,
-
-    @JsonProperty("message")
-    String message,
-
-    @JsonProperty("http_code")
-    Integer httpCode,
-
-    @JsonProperty("partial")
-    Boolean partial
+    @JsonProperty("result") String result,
+    @JsonProperty("message") String message,
+    @JsonProperty("http_code") Integer httpCode,
+    @JsonProperty("partial") Boolean partial
 ) {
 }
